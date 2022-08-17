@@ -8,7 +8,7 @@ from ogb.linkproppred import PygLinkPropPredDataset
 
 
 def save_embedding(model):
-    torch.save(model.embedding.weight.data.cpu(), 'embedding.pt')
+    torch.save(model.embedding.weight.data.cpu(), 'embedding_patch.pt')
 
 
 def main():
@@ -16,11 +16,11 @@ def main():
     parser = argparse.ArgumentParser(description='OGBL-Vessel (Node2Vec)')
     parser.add_argument('--device', type=int, default=0)
     parser.add_argument('--embedding_dim', type=int, default=64)
-    parser.add_argument('--walk_length', type=int, default=5)
-    parser.add_argument('--context_size', type=int, default=5)
-    parser.add_argument('--walks_per_node', type=int, default=10)
+    parser.add_argument('--walk_length', type=int, default=15)
+    parser.add_argument('--context_size', type=int, default=3)
+    parser.add_argument('--walks_per_node', type=int, default=3)
     parser.add_argument('--batch_size', type=int, default=256)
-    parser.add_argument('--lr', type=float, default=1e-6)
+    parser.add_argument('--lr', type=float, default=1e-2)
     parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--log_steps', type=int, default=1)
 
@@ -57,9 +57,9 @@ def main():
                 print(f'Epoch: {epoch:02d}, Step: {i+1:03d}/{len(loader)}, '
                       f'Loss: {loss:.4f}')
 
-            #if (i + 1) % 100 == 0:  # Save model every 100 steps.
-            #    save_embedding(model)
-        #save_embedding(model)
+            if (i + 1) % 100 == 0:  # Save model every 100 steps.
+                save_embedding(model)
+        save_embedding(model)
 
 
 if __name__ == "__main__":

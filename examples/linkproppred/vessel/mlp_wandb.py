@@ -145,14 +145,14 @@ def main():
     parser.add_argument('--dropout', type=float, default=0.2)
     parser.add_argument('--batch_size', type=int, default=64 * 1024)
     parser.add_argument('--lr', type=float, default=0.00005) # 0.01, 0.0001
-    parser.add_argument('--epochs', type=int, default=250) # 20
+    parser.add_argument('--epochs', type=int, default=3000) # 20
     parser.add_argument('--eval_steps', type=int, default=1)
-    parser.add_argument('--runs', type=int, default=10)
+    parser.add_argument('--runs', type=int, default=1)
 
     args = parser.parse_args()
     print(args)
 
-    wandb.init(config=args, project="ogbl-vesselpatch-mf-baseline")
+    wandb.init(config=args, project="ogbl-vesselpatch-mlp-baseline")
 
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
@@ -169,7 +169,7 @@ def main():
 
     # use embeddings
     x = data.x.to(torch.float)
-    embedding = torch.load('embedding.pt', map_location='cpu')
+    embedding = torch.load('embedding_patch.pt', map_location='cpu')
     x = torch.cat([x, embedding], dim=-1)
     x = x.to(device)
 
