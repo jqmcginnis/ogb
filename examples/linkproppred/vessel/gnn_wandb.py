@@ -214,8 +214,8 @@ def main():
     parser.add_argument('--hidden_channels', type=int, default=256)
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--batch_size', type=int, default=64 * 1024)
-    parser.add_argument('--lr', type=float, default=0.000001) 
-    parser.add_argument('--epochs', type=int, default=1000) 
+    parser.add_argument('--lr', type=float, default=0.01) 
+    parser.add_argument('--epochs', type=int, default=3000) 
     parser.add_argument('--eval_steps', type=int, default=1)
     parser.add_argument('--runs', type=int, default=1)
     args = parser.parse_args()
@@ -285,6 +285,11 @@ def main():
                 logger.add_result(run, result)
 
                 train_roc_auc, valid_roc_auc, test_roc_auc = result
+                metrics =  {'loss': loss, 
+                            'train_rocauc': train_roc_auc, 
+                            'valid_rocauc': valid_roc_auc, 
+                            'test_rocauc': test_roc_auc}
+                wandb.log(metrics)
                 print(f'Run: {run + 1:02d}, '
                     f'Epoch: {epoch:02d}, '
                     f'Loss: {loss:.4f}, '
